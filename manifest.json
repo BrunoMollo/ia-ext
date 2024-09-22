@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Mouse Wheel Click Listener",
+  "version": "1.0",
+  "description": "Listens for middle mouse wheel clicks and performs an action.",
+  "permissions": ["activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
