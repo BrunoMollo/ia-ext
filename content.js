@@ -665,6 +665,380 @@ De esta forma, el problema puede resolverse con el uso de las reglas en combinac
 estrategia apropiada de control para trasladarse a través del espacio problema hasta encontrar
 una ruta desde un estado inicial hasta un estado objetivo.
 `,
+  "1.5.3. Sistemas de producción ": `
+Debido a que la búsqueda es el núcleo de muchos procesos inteligentes, es adecuado
+estructurar los programas de IA de forma que se facilite describir y desarrollar el proceso de
+búsqueda. Los sistemas de producción proporcionan tales estructuras. Más abajo se introduce
+una definición de sistema de producción. Conviene no confundirse con otros usos de la palabra
+producción, tales como lo que se produce en una fábrica.
+Un sistema de producción consiste en:
+e Un conjunto de reglas compuestas por una parte izquierda (un patrén) que determina
+la aplicabilidad de la regla y una parte derecha, que describe la operación que se lleva a
+cabo si se aplica la regla.
+* Una o más bases de datos/conocimiento que contengan cualquier tipo de información
+apropiada para la tarea en particular. Partes de la base de datos pueden ser
+permanentes, mientras que otras pueden hacer referencia solo a la solución del
+problema actual. La información almacenada en estas bases de datos debe
+estructurarse de forma adecuada.
+e Una estrategia de control que especifique el orden en el que las reglas se comparan con
+la base de datos, y la forma de resolver los conflictos que surjan cuando varias reglas
+puedan ser aplicadas a la vez.
+s Un aplicador de reglas.
+(Prog. GRANJERO.PRO)
+Hasta aquí, la definición de un sistema de producción es muy general. Abarca una gran
+cantidad de sistemas, incluyendo nuestras descripciones del jugador de ajedrez y de la
+solución al problema de las jarras de agua. También abarca una familia de intérpretes
+generales de sistemas de producción que incluye:
+» tLenguajes básicos de sistemas de producción, tales como OPS5 (Brownston, 1985) y
+ACT* (Anderson, 1983).
+* Sistemas más complejos, con frecuencia híbridos, denominados armazones de sistemas
+expertos (expert systems sheil), los cuales poseen entornos completos (hablando
+relativamente) para la construcción de sistemas expertos basados en conocimiento.
+e Arquitecturas generales de resolución de problemas tales como SOAR (Laid, 1987),
+sistema basado en un conjunto específico de hipótesis motivadas cognoscitivamente por
+la naturaleza del problema a resolver.
+Todos estos sistemas mantienen la arquitectura de un sistema de producción en su totalidad y
+permiten que el programador escriba reglas para definir los problemas particulares que tienen
+que resolverse. 
+`,
+  "1.5.4. Análisis del problema": `
+La búsqueda heurística es un método muy general que se puede aplicar a una gran clase de
+problemas. Incluye gran variedad de técnicas especificas, cada una de las cuales es
+particularmente efectiva para una pequeña clase de problemas. A fin de poder elegir el método
+más apropiado (o una combinación de métodos) para un problema en particular, es necesario
+analizarlo con arreglo a varias dimensiones clave:
+* ¿Puede el problema descomponerse en un conjunto de subproblemas independientes (o
+casi) más pequeños o sencillos?
+* ¿Pueden ignorarse pasos dados o al menos deshacerse si se comprueba que no eran
+adecuados?
+* ¿Es predecible el universo del problema?
+* ¿Una solución es buena de manera evidente, sin necesidad de compararla con todas las
+demás posibles soluciones?
+* Lasolución deseada, ¿es un estado del mundo o una ruta hacia algún estado?
+e ¿Es necesaria una gran cantidad de conocimiento para resolver el problema o solo es
+necesario para restringir la búsqueda?
+* La computadora a la que simplemente se le da el problema ¿Puede emitir una soludón, o es necesario que ésta interactúe con una persona? 
+¿Puede descomponerse el problema?
+Suponga que se desea resolver el problema de calcular la expresión:
+J.(xz +3x + sen?á — cos? x)dx
+Se puede resolver este problema descomponiéndolo en tres problemas más pequeños, cada
+uno de los cuales puede resolverse usando una pequeña colección de reglas específicas. La
+Figura 1.6 muestra el árbol del probiema que se genera mediante el proceso de
+descomposición. El árbol puede generarse con un sencillo programa recursivo de integración
+de esta forma: en cada paso, se verifica si el problema en el que se trabaja se puede resolver
+directamente. Si lo es, se devuelve inmediatamente la respuesta. Si el problema no se puede
+resolver fácilmente, el integrador verifica si puede descomponer el problema en otros más
+simples. Si .puede, crea estos problemas y se llama recursivamente a sí mismo con ellos.
+Mediante el uso de esta técnica de descomposición del problema, se pueden resolver
+fácilmente problemas muy grandes. 
+Considere ahora el problema ilustrado en la Figura 1.7. Este problema está extraído de un
+dominio que con frecuencia está referenciado en la literatura de IA como el mundo de los
+bloques. Se permiten los siguientes operadores:
+DESPEJADO (x) [el blogue x no tiene nada sobre él] > SOBRE (X, Mesa) [coge x y ponlo sobre
+la mesa]
+DESPEJADO () y DESPEJADO (y) > SOBRE (X, y) [poner x sobre y] 
+La aplicación de la técnica de descomposición del problema a este sencillo ejemplo de mundo
+de bloques se lleva al árbol solución mostrado en la Figura 1.8. En la figura, los objetivos están
+subrayados; los estados alcanzados no lo están. La idea de esta solución es la de reducir el
+problema de conseguir B sobre C y A sobre B a dos problemas separados. El primero de estos
+nuevos problemas, conseguir B sobre C, es sencillo, dado el estado inicial. Simplemente se
+coloca B sobre C. El segundo subobjetivo no es tan sencillo, puesto que los únicos operadores
+permitidos toman un solo bloque a la vez, se tiene que eliminar A quitando C antes de coger A
+y situarlo sobre B. Esto puede hacerse facilmente. Sin embargo, al intentar combinar las dos
+subsoluciones en una sola, se falla. Independientemente de cua! se haga primero, no se podrá
+realizar el segundo tal y como se ha planeado. En este problema los dos subproblemas no son
+independientes. Interactúan, y tales interacciones deben ser consideradas a fin de liegar a una
+solución para la totalidad del problema. 
+
+¿Pueden deshacerse o ignorarse pasos hacia una solución?
+Suponga que se intenta probar un teorema matemático. En primer lugar se prueba un lema
+que se piensa que será útil. En cierto instante, se comprueba que el lema no supone una
+ayuda para nada. ¿Se está en un apuro?
+No. Todo lo que se necesita saber para probar el teorema es todavía cierto .y está memorizado.
+Algunas reglas que pudieron aplicarse al principio aún pueden hacerlo. Basta con continuar 
+como si se comenzara de nuevo. Todo el esfuerzo realizado se ha perdido en explorar un
+callejón sin salida.
+El 8-puzzle: El 8-puzzle es un cajón cuadrado en el que hay situados ocho bloques cuadrados.
+El cuadrado restante está sin rellenar. Cada bloque tiene un número. Un bloque adyacente al
+hueco puede deslizarse hacia él. El juego consiste en partir de una posición de salida para
+ilegar a una posición especificada como objetivo. El objetivo es transformar la posición inicial
+en la posición objetivo mediante el deslizamiento de los bloques.
+En la Figura 1.9 se ve un juego de muestra con el 8-puzzle. Al intentar resolver el 8-puzzle, se
+pueden realizar movimientos estúpidos. Por ejemplo, en el juego que se muestra arriba, se
+podría empezar deslizando el blogue 5 al espacio vacio. Al hacer esto, no se podrá deslizar el
+bloque 6 al hueco porque éste se ha movido, pero podemos volver atrás y deshacer el primer
+movimiento, deslizando el bloque 5 adonde estaba. Entonces ya podemos mover el bioque 6.
+Los errores pueden recuperarse también, pero no de una forma tan sencilla como en el
+problema de la demostración del teorema. Se debe realizar un paso adicional para deshacer
+cada movimiento incorrecto, mientras que no se necesita realizar ninguna acción para
+“deshacer” un lema inútil. Además, el mecanismo de contro! de resolución de un 8-puzzie no
+debe perder de vista el orden en que se realizan las operaciones para que éstas puedan
+deshacerse si es necesario. La estructura de control del demostrador de teoremas no necesita
+almacenar toda esta información. 
+
+Considere otra vez el problema del juego del ajedrez. Suponga que un programa que juegue al
+ajedrez realiza un movimiento estúpido y cae en la cuenta un par de movimientos después; el
+programa no puede jugar como si nunca hubiera hecho el movimiento estúpido ni puede volver
+atrás y empezar el juego desde ese punto. Todo lo que puede hacer es intentar hacerlo mejor
+en la situación actual y partir desde ésta. 
+
+Estas tres definiciones hacen referencia a los pasos de la solución de un problema y, por lo tanto, pueden surgir para caracterizar sistemas de producción específicos para resolver
+problemas más que el problema en sí mismo. Quizá una formulación diferente de un mismo
+problema haría que el probiema fuera caracterizado de forma diferente. Estrictamente
+hablando, esto es cierto. Sin embargo, debido a muchos grandes problémáas, existe solo una
+formulación (o un pequeño número de ellas esencialmente equivalentes) que de forma natural
+describe el problema. Esto es así para cada uno de los problemas expuestos anteriormente.
+Cuando éste sea el caso, tiene sentido considerar la recuperabilidad de un- problema de forma
+equivalente a la recuperabilidad de una formulación natural para él.
+La recuperabilidad de un problema juega un papel importante en la determinación de la
+compiejidad de la estructura de control necesaria para resolver el problema. Los problemas.
+ignorables se resuelven utilizando una senciila estructura de control que nunca vuelve hacia
+atrás. Estas estructuras de control son fáciles de implementar. Los problemas. recuperables se
+resuelven con estrategias un poco más complicadas que a veces cometen errores. Para
+recuperarse de tales errores será necesaria una vuelta atrás, de forma que la estructura de
+control debe implementarse con una pila “push-down”, en la que las decisiones se conservan
+en caso de que necesiten ser deshechas más tarde. Los probiemas no recuperables, por otro
+lado, se resuelven mediante un sistema que debe apiicar muchísimo esfuerzo en la toma de
+decisiones ya que éstas son irrevocabies. Algunos problemas irrecuperables se resuelven con
+métodos de estilo recuperabie usando un proceso de planificación, en el que se analiza por
+adelantado una secuencia entera de pasos para descubrir adonde conducirá antes de dar el
+primer paso. Más adelante se explican las clases de problemas en los que es posible hacer esto.
+¿Es predecible el universo?
+Suponga nuevamente que estamos jugando al 8-puzzle. Cada vez que se hace un movimiento,
+se sabe exactamente qué ocurrirá. Esto significa que es posible planificar una secuencia entera
+de movimientos y estar seguros de que se conoce cual sera el resultado. Es posible utilizar una
+planificación para evitar tener que deshacer movimientos, si bien todavía se deben hacer
+comprobaciones de movimientos en tiempo de planificación. De esta forma, es necesaria una
+estructura de control que permita la comprobación.
+Sin embargo, en otros juegos diferentes al 8-puzzle, no es posible un proceso de planificación.
+Suponga que queremos jugar al bridge. Una de las decisiones que hay que tomar es qué carta
+jugar en la primera baza. Sería deseable planificar la mano completa antes de realizar esta
+primera jugada. Pero ahora no es posible hacer tal planificación con certeza debido a que no se
+sabe con exactitud donde están las cartas y qué harán los otros jugadores en sus turnos. Lo
+mejor que se puede hacer es investigar distintos planes y utilizar las probabilidades de las
+consecuencias que se derivan de su elección para resaltar el que tenga la más alta
+uu
+versus consecuencia-incierta, interactúan de una forma interesante. Tal y como se ha
+mencionado siempre, una forma de resolver los problemas irrecuperables es planificando una
+solución completa antes de embarcarse en la implementación del plan. Sin embargo, este
+proceso de planificación solo es útil en los problemas de consecuencia-cierta. Así, uno de los
+tipos de problemas más difíciles de resolver son los irrecuperables de consecuencia-incierta.
+Ejemplos de tales problemas son los siguientes:
+Bridge. Sin embargo, puede mejorarse un poco ya que existen estimaciones exactas de las
+probabilidades de cada una de las posibles consecuencias.
+Contro! de un brazo de robot. La consecuencia es incierta debido a varias razones. Alguien
+podría poner algo en la ruta del brazo; los mecanismos del brazo podrían atascarse; un leve
+error podría causar que el brazo choque con una pila de objetos.
+Ayudar a un abogado a decidir cómo defender a su cliente contra un cargo de asesinato. En
+este caso no se puede dar probablemente una lista de posibles consecuencias, y mucho menos
+dar sus probabilidades. 
+
+Una solución adecuada ¿es absoluta o relativa?
+Considere el problema de responder a preguntas basadas en una base de datos de hechos
+simples, tal como ésta:
+1. Marco fue un hombre.
+2. Marco era pompeyano.
+3. Marco nació en el año 40 d.c.
+4. Todos los hombres son mortales.
+5. Todos los pompeyanos murieron con la erupción del volcán en el año 79 d.c.
+6. Níngún mortal vive más de 150 años.
+7. Estamos en el año 1994 d.c.
+Suponga que se hace la siguiente pregunta “¿Está Marco vivo?”. Al representar cada uno de
+estos hechos en un lenguaje formal, tal como la lógica de predicados, y al utilizar métodos
+formales de inferencia, puede derivarse faciimente una respuesta a la pregunta. De hecho,
+cualquiera de las dos formas de razonamiento conducirá a la respuesta, tal y como se muestra
+en la Figura 1.10. Nuestro interés se centra en responder a esta pregunta sin importar qué
+camino se ha seguido para hacerlo. Si se sigue un camino que lleva a la respuesta con éxito,
+no hay razón para volver atrás y ver si existen otros caminos que también lleguen a la solucién. 
+
+Pero ahora considere de nuevo el problema del viajante de comercio. El objetivo es encontrar
+la ruta más corta que lleve a cada ciudad exactamente una vez. Suponga que las ciudades a
+visitar y las distancias entre elias son las que aparecen en la Figura 1.11. 
+El vendedor podria comenzar desde Boston. En ese caso, una ruta que podría seguír es la que
+tiene 8850 milias de longitud. Pero, ¿es ésta la solución al problema? La respuesta es que na
+se puede asegurar hasta que no se intenten todas las demás rutas y se esté seguro de que
+ninguna de ellas es más corta. En este caso, como se ve en la Figura 1.12, la primera ruta no
+es definitivamente la solución al problema del viajante. 
+
+¿La solución es un estado o una ruta?
+Considere el problema de encontrar una interpretación consistente a la frase:
+El presidente del banco comió un píato de ensalada de pasta con el tenedor.
+Existen varios componentes de esta frase que, si se aislan, pueden tener más de una
+interpretación. Sin embargo, los componentes tienen que formar un todo, y de esta forma se
+restringen las otras posibles interpretaciones. Algunas causas de ambigliedad en la frase son
+las siguientes:
+La palabra “banco” puede referirse a una institución financiera o a un objeto para sentarse. Sin
+embargo, solo uno de ellos puede tener un presidente.
+La palabra “plato” es el objeto directo del verbo “comer”. Es posible comerse un plato, pero es
+más usual comerse la ensalada de pasta que ei plato. .
+Una ensalada de pasta es una ensalada que contiene pasta. Sin embargo, existen otras formas
+semánticas de agrupar dos nombres. Por ejemplo, la comida de perros normalmente no
+contiene perros.
+La frase “con el tenedor” puede modificar distintas partes de la oración. En este caso, modifica
+al verbo “comer”. Pero, si la frase hubiera sido “con vegetales”, la estructura de la modificación
+sería diferente. Y si la frase hubiera sido “con sus amigos”, la estructura sería también
+diferente. 
+
+Debido a las interacciones existentes entre los distintos constituyentes de esta oración, puede
+ser necesaria una búsqueda para encontrar una interpretación completa de la misma. Sin
+embargo, para resolver el problema de encontrar esta interpretación se necesita generar solo
+la interpretación misma. No es necesario ningún registro del proceso seguido para encontrar la
+interpretación.
+Compare esto con el problema de las jarras de agua. En este caso no basta con indicar que se
+ha resuelto el problema y que la solución es (2,0). Para este tipo de problemas, lo que
+realmente se pide no es el estado final, sino el camino que se ha seguido para encontrar ese
+estado. Así, la solución a este problema debe ser una secuencia de operaciones (a veces
+denominada “plan”) que produce el estado final. 
+
+¿Cuál es el papel del conocimiento?
+Considere de nuevo el problema del ajedrez. Suponga que se dispone de una potencia de
+computación ifimitada. ¿Cuánto conocimiento sería necesario para realizar un programa
+perfecto? La respuesta es muy poco -únicamente las reglas que determinen los movimientos
+legales y algún sencillo mecanismo de control que implemente el procedimiento de búsqueda
+apropiado. Algún conocimiento adicional sobre cosas tales como buenas estrategias y tácticas
+ayudaría, -por supuesto, considerablemente a restringir la búsqueda para aumentar la
+velocidad de ejecución del programa. -
+Considere ahora, sin embargo, el problema de leer los periódicos del día para decidir cuales de
+ellos apoyan a los republicanos y cuales a los demócratas en unas elecciones. Asuma de nuevo
+una potencia de computación ilimitada, ¿cuánto conocimiento sería necesario para que la
+computadora intente resolver este problema? Esta vez la respuesta es que se necesita una
+gran cantidad. Sería necesario conocer cosas como éstas:
+El nombre de los candidatos de cada partido.
+El hecho de que si la mayor exigencia que se tiene es bajar los impuestos, probablemente se
+está apoyando a los republicanos.
+El hecho de que si la mayor exigencia que se tiene es que mejore la'educación, probablemente
+se está apoyando a los demócratas.
+El hecho de que si uno se opone a un gran aparato del Estado, probablemente se está
+apoyando a los Republicanos.
+Y muchos má
+L U
+¿Necesita la tarea interaccionar con una persona?
+Algunas veces resulta provechoso programar las computadoras para resolver problemas de
+una manera que la mayoría de la gente no sería capaz de entender, Esto es así si el nivel de
+interacción entre.el hombre y la computadora es del tipo. Entrada-problema Salida-solución.
+Sin embargo, se están desarrollando cada vez más programas que necesitan interacción
+
+intermedia con el hombre, tanto para proporcionar información adicional de entrada al
+programa como para proporcionar noticias adicionales al usuario.
+Considérese, por ejemplo, el problema de la demostración de teoremas matemáticos, Si:
+Todo lo que se quiere saber es si existe una demostración.
+El programa es capaz de haliar la demostración por sí mismo.
+Entonces no importa la estrategia que use el programa para hallar la demostración. Puede
+utilizar, por ejemplo, el procedimiento de resolución, el cual puede ser muy eficiente, aunque
+no sea muy natural para el hombre. Pero si alguna de estas condiciones no se cumple, la
+forma de hallar la demostración tiene mucha importancia. Suponga que se intenta probar
+algún nuevo y difícil teorema. Se puede pedir una demostración que siguiera los patrones
+tradicionales de forma que un matemático esté seguro de que la demostración es correcta solo
+con leerla. Por otra parte, dar con una prueba del teorema puede llegar a ser tan complejo que
+el programa no sepa por donde empezar. Hasta ahora, las personas son superiores al realizar
+las estrategias de alto nivel que se necesitan para demostrar un teorema, de forma que una computadora necesita pedir ciertos consejos. Por ejemplo, normalmente en geometría resulta
+más fácil encontrar una prueba si alguien indica como representarla gráficamente. Para poder
+utilizar estos consejos, el razonamiento seguido por una computadora debe ser análogo al
+realizado por el consejero humano, al menos en ciertos aspectos. Debido a que las
+computadoras trabajan en áreas muy significativas de nuestras vidas tales como diagnósticos
+médicos, la gente no podrá aceptar el veredicto que genere un programa si no puede
+comprender el razonamiento que ha seguido para darlo.
+o el ,
+Por supuesto, esta distinción no es totalmente estricta al describir los dominios particulares del
+probiema. Tal y como se ha dicho, la demostración de teoremas matemáticos podría ser tanto
+de un tipo como de otro. Sin embargo, para una aplicación en particular, se necesitan sistemas
+de uno u otro tipo, y esta decisión tiene gran importancia a la hora de elegir el método de
+resolución del problema. 
+`,
+  "1.5.5. Características de los Sistemas de producción ": `
+Se ha examinado una serie de características que distinguen varios tipos de problemas.
+También se ha argumentado que los sistemas de producción representan la forma más
+adecuada de describir las operaciones que se llevan a cabo en la búsqueda de una solución a
+un problema. En este punto pueden surgir dos razonábles preguntas:
+¿Pueden los sistemas de produ¿c¡ón, al igual que los problemas, ser descriptos por un conjunto
+de características que arrojen alguna luz sobre como implementarios fácilmente?
+Si es así, ¿qué relaciones existen entre los tipos de problemas y los tipos de sistemas de
+producción que son adecuados para resolver estos problemas?
+La-respuesta a la primera pregunta es afirmativa. Considere las siguientes definiciones de
+sistemas de producción. Un sistema de producción monótono es aquel en el que la aplicación
+de una regla nunca prevé la posterior aplicación de otra regla que podría haberse aplicado
+cuando se seleccionó la primera. Un sistema de producción no monótono es aquél en el que lo anterior no es cierto. Un sistema de producción parcialmente conmutativo es aquel que tiene la
+propiedad de que si una determinada aplicación de una secuencia de reglas transforma el
+estado x en el estado y, entonces alguna permutación permitida (por ejemplo, deben
+satisfacerse las precondiciones de una regla para que pueda ser aplicada) de estas reglas,
+también transforma el estado x en el estado y. Un sistema de producción conmutativo es aquel
+que es a la vez monótono y parcialmente conmutativo. 
+La relevancia de esta clasificación de los sistemas de producción estriba en la relación que
+existe entre las categorías de los mismos y las estrategias apropiadas de implementación. Sin
+embargo antes de explicar estas relaciones, puede resultar provechoso clarificar las
+definiciones viendo como se relacionan con problemas específicos.
+De esta forma, se llega a la segunda de las cuestiones expresadas anteriormente la cual
+indaga sobre si existe una relación interesante entre las clases de sistemas de producción y las
+clases de problemas. Dado un problema resoluble, existe un número infinito de sistemas de
+producción que proporcionan formas de encontrar soluciones. Algunos de ellos serán más
+eficientes y naturales que otros. Un problema que puede ser resuelto con un sistema de
+producción, puede ser resuelto con uno conmutativo (la clase más restrictiva), sin embargo, el
+sistema conmutativo puede ser tan inmanejable que sea prácticamente inútil. Puede utilizar
+estados individuales para describir secuencias enteras de reglas aplicadas por un sistema no
+conmutativo más simple. Así, desde un punto de vista formal, no existe relación alguna entre
+tipos de problemas y tipos de sistemas de producción debido a que todos los problemas
+pueden resolverse utilizando todos los tipos de sistemas de producción. Pero desde un punto
+de vista práctico, definitivamente existe relación entre tipos de problemas y los tipos de
+sistemas de producción que se prestan de forma natural a representar estos problemas. Para ver esto, veamos algunos ejemplos. La Figura 1.13 muestra las cuatro categorías en que se
+dividen los sistemas de producción de acuerdo con lás dos dicotomías, sistemas monótonos versus no monótonos y sistemas parcialmente conmutativos versus no parcialmente
+conmutativos, de forma que algunos problemas pueden resolverse más naturalmente por un
+tipo de sistema, La esquina superior izquierda la forman los sistemas conmutativos.
+Los sistemas parcialmente conmutátivos y los monótonos son adecuados para resolver
+problemas ignorables. Esto no es sorprendente desde el momento en que las definiciones de
+ambos son esencialmente las mismas. Sin embargo, se advierte que los problemas ignorables
+son aquellos en los que una formulacién natural será un sistema parcialmente conmutativo y
+monótono. Los problemas que implican la creación de nuevos objetos más que el cambio de
+los viejos suelen ser ignorables. La demostración de teoremas, tal y como se ha descrito, es un
+ejemplo de proceso creativo. Realizar deducciones a partir de hechos conocidos es también un
+proceso creativo. Ambos procesos se pueden implementar fácilmente con un sistema
+parcialmente conmutativo y monótono.
+Los sistemas parcialmente conmutativos y monótonos son importantes desde el punto de vista
+de la implementacién porque no contemplan la característica de volver hacia estados pasados
+cuando se descubre que se ha seguido un camino incorrecto.. Si bien con frecuencia es
+adecuado implementar estos sistemas con vuelta atrás (backtracking) para garantizar una
+búsqueda sistemática, la base de datos actual que representa el problema, no necesita
+regenerarse, El resultado de esto es, con frecuencia, un notable incremento de la eficiencia
+debido a que la base de datos no tiene que ser regenerada y no es necesario estar al tanto de
+cada cambio que se produjo en el proceso de búsqueda.
+Hasta ahora se han explicado aquellos sistemas de producción que son a la vez monótonos y
+parcialmente conmutativos. Estos sistemas son adecuados para problemas en los que las cosas
+no cambian; se crean. Por otro lado, los sistemas no monótonos y parcialmente conmutativos,
+se adecuan a aquellos problemas en los que se realizan cambios pero éstos son reversibles y
+en los que el orden. de las operaciones no es crítico. Este es normalmente el caso de los
+problemas de manipulación física, como la navegación de robots en una superficie plana.
+Suponga que el robot dispone de los siguientes operadores: ir hacia el norte (N), ir hacia el
+este (E), ir hacia el sur (S) e ir hacia el oeste (0). Para flevar a cabo su objetivo, no importa si
+el robot ejecuta N-N-E o N-E-N. Dependiendo de cómo se eligen los operadores, el problema
+del 8-puzzle y el del mundo de bioques pueden considerarse también como parcialmente conmutativos.
+Estos dos tipos de sistemas parcialmente conmutativos son importantes desde el punto de
+vista de la implementación porque tienden a alcanzar muchos estados individuales duplicados
+durante el proceso de búsqueda.
+
+Los sistemas de producción que no son parcialmente conmutativos son adecuados para
+muchos problemas en los que se producen cambios irreversibies. Por ejemplo, considere el
+problema de realizar un proceso que produzca un compuesto químico. Los operadores
+disponibles incluyen cosas como “Añadir el agente químico x al recipiente” o “Cambiar la
+temperatura hasta t grados”, Estos operadores pueden causar cambios irreversibles en el
+compuesto. El orden en que se realizan las operaciones es importante para determinar el
+resultado final. Es posible que si x se añade a y, se forme un compuesto estable, de forma que
+la posterior adición de z no produzca ningún efecto; sin embargo, si z se añade a y, puede
+formarse un compuesto estable diferente, de forma que no tenga efecto alguno la posterior
+adición de x. En los sistemas de producción que no son parcialmente conmutativos es menos
+probable que se llegue al mismo nodo varias veces durante el proceso de búsqueda. Cuando se
+trate con sistemas que describan procesos irreversibles, es particularmente importante tomar
+las decisiones correctas la primera vez, aunque si el universo es predecible, puede que una
+buena planificación las haga menos determinantes. 
+
+Ejercicio
+Encontrar una buena representación del espacio de estados para el problema del misionero y
+los canibales.
+Tres misioneros y tres canibales se encuentran en una orilla de un río. A todos ellos les
+gustaría pasar a la otra orilla. Los misioneros no se fían de los caníbales. Por eso, los
+misioneros han planificado el viaje de forma que el número de misioneros en cada orilla del río
+nunca sea menor que el número de caníbales en esa misma orilla. Solo disponen de una lancha
+de dos plazas. ¿Cómo podrían atravesar el río sin que los misioneros corran peligro de ser
+devorados por los caníbales? 
+`,
 };
 
 document.addEventListener("auxclick", function (event) {
